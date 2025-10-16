@@ -1,0 +1,101 @@
+/* Arquivo: static/style.css */
+:root{
+  --bg: #f3f7fb;
+  --card: #ffffff;
+  --accent: #0b67d0;
+  --muted: #666;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(180deg,#e9f1ff,#f7fbff);
+  margin:0;
+  padding:40px 16px;
+  color:#111;
+}
+
+.container{
+  max-width:1000px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 1fr 320px;
+  gap:24px;
+  align-items:start;
+}
+
+h1{margin:0 0 12px;color:var(--accent)}
+
+.form{
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(12,50,100,0.08);
+}
+
+.form label{display:block;font-weight:600;margin:10px 0 6px}
+.form input[type="text"],
+.form input[type="number"],
+.form select{
+  width:100%;
+  padding:10px;
+  border:1px solid #e0e6ef;
+  border-radius:8px;
+  background:#fff;
+}
+
+.acoes{margin-top:14px; display:flex; gap:12px}
+button, .botao{
+  background:var(--accent);
+  color:#fff;
+  padding:10px 14px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+}
+button:hover, .botao:hover{opacity:0.92}
+
+.info{
+  background:var(--card);
+  padding:18px;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(12,50,100,0.06);
+}
+
+.resumo{
+  background:var(--card);
+  padding:16px;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(12,50,100,0.06);
+  margin-bottom:12px;
+}
+
+.tabela{
+  background:var(--card);
+  padding:16px;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(12,50,100,0.06);
+  margin-top:12px;
+}
+
+table{width:100%;border-collapse:collapse}
+table th, table td{padding:10px;border-bottom:1px solid #eef4fb;text-align:left}
+table th{background:#f6fbff;font-weight:700}
+
+.link-voltar{
+  margin-left:12px;
+  display:inline-block;
+  text-decoration:none;
+  color:var(--accent);
+  padding:10px 14px;
+  border-radius:8px;
+  background:#ffffff;
+  border:1px solid #e6eefb;
+}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr; padding: 20px}
+  .info{order:2}
+}

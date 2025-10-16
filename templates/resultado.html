@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Orçamento — R.M</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>Orçamento para {{ nome_cliente }}</h1>
+
+    <section class="resumo">
+      <p><strong>Tipo:</strong> {{ summary.tipo_imovel | capitalize }}</p>
+      {% if summary.quartos is not none %}
+        <p><strong>Quartos:</strong> {{ summary.quartos }}</p>
+      {% endif %}
+      <p><strong>Vagas:</strong> {{ summary.vagas }}</p>
+      <p><strong>Possui crianças:</strong> {{ 'Sim' if summary.tem_criancas else 'Não' }}</p>
+      <p><strong>Aluguel mensal (após ajustes):</strong> R$ {{ summary.aluguel_base_calculado }}</p>
+      <p><strong>Desconto aplicado:</strong> R$ {{ summary.desconto_aplicado }}</p>
+      <p><strong>Valor do contrato:</strong> R$ {{ summary.contrato_valor_total }} ({{ summary.parcelas_contrato }}x de R$ {{ summary.valor_parcela_contrato }})</p>
+      <p><strong>Total anual (soma 12 meses):</strong> R$ {{ summary.total_anual }}</p>
+    </section>
+
+    <section class="tabela">
+      <h2>Parcelas (12 meses)</h2>
+      <table>
+        <thead>
+          <tr><th>Mês</th><th>Aluguel (R$)</th><th>Parcela Contrato (R$)</th><th>Total Mensal (R$)</th></tr>
+        </thead>
+        <tbody>
+          {% for m in months %}
+            <tr>
+              <td>{{ m.mes }}</td>
+              <td>{{ m.aluguel }}</td>
+              <td>{{ m.parcela_contrato }}</td>
+              <td>{{ m.total }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <p class="acoes">
+      <a class="botao" href="{{ url_for('download_csv', csv_filename=csv_filename) }}">Baixar CSV (12 parcelas)</a>
+      <a class="link-voltar" href="{{ url_for('index') }}">Voltar</a>
+    </p>
+  </main>
+</body>
+</html>

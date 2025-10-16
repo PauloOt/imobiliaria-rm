@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>R.M — Gerador de Orçamento</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>Gerador de Orçamento — R.M</h1>
+
+    <form action="{{ url_for('gerar_orcamento_route') }}" method="post" class="form">
+      <label>Nome do cliente:
+        <input type="text" name="nome_cliente" required>
+      </label>
+
+      <label>Tipo de imóvel:
+        <select name="tipo_imovel" id="tipo_imovel" onchange="atualizarFormulario()">
+          <option value="apartamento">Apartamento</option>
+          <option value="casa">Casa</option>
+          <option value="estudio">Estúdio</option>
+        </select>
+      </label>
+
+      <label id="label_quartos">Quartos:
+        <select name="quartos" id="quartos">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </label>
+
+      <label>Vagas (número):
+        <input type="number" name="vagas" id="vagas" min="0" value="0">
+      </label>
+
+      <label>Possui crianças?
+        <select name="tem_criancas" id="tem_criancas">
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+      </label>
+
+      <label>Parcelas do contrato (1 a 5):
+        <input type="number" name="parcelas_contrato" id="parcelas_contrato" min="1" max="5" value="1">
+      </label>
+
+      <div class="acoes">
+        <button type="submit">Gerar Orçamento</button>
+      </div>
+    </form>
+
+    <aside class="info">
+      <h3>Regras aplicadas</h3>
+      <ul>
+        <li>Apartamento R$700 / 1 quarto (2 quartos +R$200)</li>
+        <li>Casa R$900 / 1 quarto (2 quartos +R$250)</li>
+        <li>Estúdio R$1200 (até 2 vagas R$250, vagas extras R$60 cada)</li>
+        <li>Vaga (apart/casa): R$300 por vaga</li>
+        <li>Desconto 5% em apartamento para quem não possui crianças</li>
+        <li>Contrato R$2.000, parcelável em até 5x</li>
+      </ul>
+    </aside>
+  </main>
+
+<script>
+function atualizarFormulario(){
+  const tipo = document.getElementById('tipo_imovel').value;
+  const labelQuartos = document.getElementById('label_quartos');
+  const quartosSelect = document.getElementById('quartos');
+
+  if(tipo === 'estudio'){
+    
+    labelQuartos.style.display = 'none';
+    quartosSelect.value = 1;
+  } else {
+    labelQuartos.style.display = 'block';
+  }
+}
+
+
+atualizarFormulario();
+</script>
+</body>
+</html>
