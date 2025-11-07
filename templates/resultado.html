@@ -16,10 +16,10 @@
       {% endif %}
       <p><strong>Vagas:</strong> {{ summary.vagas }}</p>
       <p><strong>Possui crianças:</strong> {{ 'Sim' if summary.tem_criancas else 'Não' }}</p>
-      <p><strong>Aluguel mensal (após ajustes):</strong> R$ {{ summary.aluguel_base_calculado }}</p>
+      <p><strong>Aluguel mensal:</strong> R$ {{ summary.aluguel_base_calculado }}</p>
       <p><strong>Desconto aplicado:</strong> R$ {{ summary.desconto_aplicado }}</p>
-      <p><strong>Valor do contrato:</strong> R$ {{ summary.contrato_valor_total }} ({{ summary.parcelas_contrato }}x de R$ {{ summary.valor_parcela_contrato }})</p>
-      <p><strong>Total anual (soma 12 meses):</strong> R$ {{ summary.total_anual }}</p>
+      <p><strong>Contrato:</strong> R$ {{ summary.contrato_valor_total }} ({{ summary.parcelas_contrato }}x de R$ {{ summary.valor_parcela_contrato }})</p>
+      <p><strong>Total anual:</strong> R$ {{ summary.total_anual }}</p>
     </section>
 
     <section class="tabela">
@@ -42,7 +42,7 @@
     </section>
 
     <p class="acoes">
-      <a class="botao" href="{{ url_for('download_csv', csv_filename=csv_filename) }}">Baixar CSV (12 parcelas)</a>
+      <a class="botao" href="{{ url_for('download_csv', csv_filename=csv_filename) }}">Baixar CSV</a>
       <a class="link-voltar" href="{{ url_for('index') }}">Voltar</a>
     </p>
   </main>

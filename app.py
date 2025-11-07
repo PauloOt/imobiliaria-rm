@@ -4,10 +4,9 @@ import os
 import uuid
 
 app = Flask(__name__)
-app.secret_key = "troque_esta_chave_em_producao"
+app.secret_key = "chave_teste"
 
-
-PASTA_ORCAMENTOS = "orcamentos"
+PASTA_ORCAMENTOS = "orçamentos"
 os.makedirs(PASTA_ORCAMENTOS, exist_ok=True)
 
 CONTRATO_VALOR = 2000.0
@@ -18,20 +17,17 @@ BASE = {
 }
 
 def calcular_orcamento(tipo_imovel: str, quartos: int, vagas: int, tem_criancas: bool, parcelas_contrato: int):
-
     tipo = tipo_imovel.lower()
     if tipo not in BASE:
         raise ValueError("Tipo de imóvel inválido.")
 
-
     aluguel = float(BASE[tipo])
 
-
+    # Ajuste por quartos
     if tipo == "apartamento":
         if quartos == 2:
             aluguel += 200.0
         elif quartos > 2:
-
             aluguel += 200.0 + 200.0 * (quartos - 2)
     elif tipo == "casa":
         if quartos == 2:
@@ -39,19 +35,14 @@ def calcular_orcamento(tipo_imovel: str, quartos: int, vagas: int, tem_criancas:
         elif quartos > 2:
             aluguel += 250.0 + 250.0 * (quartos - 2)
 
+    # Ajuste por vagas
     if tipo in ("apartamento", "casa"):
+        aluguel += 300.0 * vagas
+    else:
         if vagas > 0:
+            aluguel += 250.0 if vagas <= 2 else 250.0 + 60.0 * (vagas - 2)
 
-            aluguel += 300.0 * vagas
-    else:  # estúdio
-        if vagas > 0:
-
-            if vagas <= 2:
-                aluguel += 250.0
-            else:
-                aluguel += 250.0 + 60.0 * (vagas - 2)
-
-
+    # Desconto
     desconto = 0.0
     if tipo == "apartamento" and not tem_criancas:
         desconto = round(0.05 * aluguel, 2)
@@ -59,12 +50,11 @@ def calcular_orcamento(tipo_imovel: str, quartos: int, vagas: int, tem_criancas:
     else:
         aluguel = round(aluguel, 2)
 
-    if parcelas_contrato < 1:
-        parcelas_contrato = 1
-    if parcelas_contrato > 5:
-        parcelas_contrato = 5
+    # Parcelas
+    parcelas_contrato = max(1, min(5, parcelas_contrato))
     parcela_contrato_valor = round(CONTRATO_VALOR / parcelas_contrato, 2)
 
+    # Meses
     months = []
     for m in range(1, 13):
         contrato_parcela = parcela_contrato_valor if m <= parcelas_contrato else 0.0
@@ -91,8 +81,8 @@ def calcular_orcamento(tipo_imovel: str, quartos: int, vagas: int, tem_criancas:
 
     return summary, months
 
+
 def salvar_csv(months: list, nome_cliente: str, tipo_imovel: str):
-   
     safe_name = "".join(c for c in nome_cliente if c.isalnum() or c in "._- ").strip().replace(" ", "_")
     filename = f"orcamento_{safe_name}_{tipo_imovel}_{uuid.uuid4().hex[:8]}.csv"
     caminho = os.path.join(PASTA_ORCAMENTOS, filename)
@@ -144,6 +134,7 @@ def download_csv(csv_filename):
         flash("Arquivo não encontrado.")
         return redirect(url_for("index"))
     return send_file(caminho, as_attachment=True, download_name=csv_filename)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
